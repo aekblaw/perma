@@ -33,7 +33,7 @@ urlpatterns = patterns('perma.views',
     #Services
     url(r'^service/email-confirm/?$', 'service.email_confirm', name='service_email_confirm'),
     url(r'^service/receive-feedback/?$', 'service.receive_feedback', name='service_receive_feedback'),
-    url(r'^service/link/status/(?P<guid>[a-zA-Z0-9\-]+)/?$', 'service.link_status', name='service_link_status'),
+    url(r'^service/link/status/(?P<guid>[a-zA-Z0-9\-]*)/?$', 'service.link_status', name='service_link_status'),
     url(r'^service/stats/users/?$', 'service.stats_users', name='service_stats_users'),
     url(r'^service/stats/links/?$', 'service.stats_links', name='service_stats_links'),
     url(r'^service/stats/darchive-links/?$', 'service.stats_darchive_links', name='service_stats_darchive_links'),
@@ -93,8 +93,9 @@ urlpatterns = patterns('perma.views',
 #    url(r'^manage/users/?$', 'manage.users', name='manage_users'),
 #    url(r'^manage/account/?$', 'manage.account', name='manage_account'),
 #    url(r'^manage/activity/?$', 'manage.activity', name='manage_activity'),
-    
-    url(r'^dark-archive/(?P<linky_guid>[a-zA-Z0-9\-]+)/?$', 'common.dark_archive_link', name='dark_archive_link'), 
+
+    url(r'^dark-archive/(?P<linky_guid>[a-zA-Z0-9\-]+)/?$', 'common.dark_archive_link', name='dark_archive_link'),
+    url(r'^cdx$', 'common.cdx', name='cdx'),
     
     # Our Perma ID catchall
     url(r'^(?P<linky_guid>[a-zA-Z0-9\-]+)/?$', 'common.single_linky', name='single_linky'),

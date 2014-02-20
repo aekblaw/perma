@@ -1,8 +1,11 @@
 # Django settings for Perma project.
 
-import os
+import os, site
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
+
+# include our third-party libs
+site.addsitedir(os.path.join(PROJECT_ROOT, 'lib'))
 
 DATABASES = {
     'default': {
@@ -147,7 +150,7 @@ NUMBER_RETRIES = 3 # if wget fails to get a resource, try to get again this many
 WAIT_BETWEEN_TRIES = .5 # wait between .5 and this many seconds between http requests to our source
 
 # Max file size (for our downloads)
-MAX_ARCHIVE_FILE_SIZE = 1024 * 1024 * 50 # 50 MB
+MAX_ARCHIVE_FILE_SIZE = 1024 * 1024 * 100 # 100 MB
 
 # Rate limits
 MINUTE_LIMIT = '6000/m'
@@ -162,3 +165,56 @@ LOGIN_DAY_LIMIT = '50000/d'
 
 # Dashboard user lists
 MAX_USER_LIST_SIZE = 100
+
+PHANTOMJS_BINARY = os.path.join(PROJECT_ROOT, 'lib/phantomjs')
+
+# temporary setting to keep warcs out of production during testing
+USE_WARC_ARCHIVE = False
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(filename)s %(lineno)d: %(message)s'
+        },
+    },
+    'filters': {
+         'require_debug_false': {
+             '()': 'django.utils.log.RequireDebugFalse'
+         }
+     },
+    'handlers': {
+        'default': {
+            'level':'INFO',
+            'filters': ['require_debug_false'],
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/tmp/perma.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
